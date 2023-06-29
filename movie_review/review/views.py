@@ -113,7 +113,7 @@ def predict_review(request):
         preprocessed_review = text_preprocessing(review_text)
         preprocessed_review = torch.tensor(vocab.numericalize(preprocessed_review)).unsqueeze(0)
 
-        rating = model(preprocessed_review).argmax(1).item()
+        rating = model(preprocessed_review).argmax(1).item() + 1
         sentiment = "It's a positive review" if rating > 5 else "It's a negative review"
 
         response = {
