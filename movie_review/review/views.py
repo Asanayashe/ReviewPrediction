@@ -4,6 +4,7 @@ from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 import spacy
 import re
+import nltk
 from nltk.stem import WordNetLemmatizer
 from nltk.corpus import stopwords
 import torch.nn as nn
@@ -56,6 +57,10 @@ class Vocabulary:
     def numericalize(self, text):
         tokenized_text = self.tokenize(text)
         return [1] + [self.stoi[token] if token in self.stoi else self.stoi["<UNK>"] for token in tokenized_text] + [2]
+
+
+nltk.download('stopwords')
+nltk.download('wordnet')
 
 
 def lemmatize_text(text):
