@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Movie Review Prediction</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+</head>
+<body>
+    <div class="container mt-3">
+        <p class="h1 text-center">Movie Review Prediction</p>
+    </div>
+
+    <form id="reviewForm" class="container text-center mb-3 col-6">
+        <label for="reviewText" class="form-label">Enter your review:</label>
+        <textarea class="form-control" id="reviewText" name="reviewText" rows="3"></textarea>
+        <input type="submit" value="Submit">
+    </form>
+
+    <div id="predictionResult" style="display: none;" class="container text-center mb-3 col-6">
+        <p class="h1 text-center">Prediction Result:</p>
+        <p>Rating: <span id="rating"></span></p>
+        <p>Sentiment: <span id="sentiment"></span></p>
+    </div>
+
+    <script>
+        document.getElementById("reviewForm").addEventListener("submit", function (event) {
+            event.preventDefault();
+
+            var reviewText = document.getElementById("reviewText").value;
+    
+            fetch('/predict-review/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                },
+                body: 'review_text=' + encodeURIComponent(reviewText)
+            })
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById("rating").textContent = data.rating;
+                    document.getElementById("sentiment").textContent = data.sentiment;
+                    document.getElementById("predictionResult").style.display = "block";
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+        });
+    </script>
+</body>
+</html>
